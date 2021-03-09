@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>JS DOM course</title>
+  </head>
+  <body>
+    <main class="container">
+      <input
+        class="add-input"
+        id="input-task"
+        type="text"
+        onkeypress="pressEnterOrPlus(event)"
+        placeholder="Insert task"
+      />
+      <button class="add-button" onclick="addTask()">Agregar tarea</button>
+    </main>
+    <ul id="task-list"></ul>
+    <script>
+      let count = 1;
+
+      // FUNCION PARA ELIMINAR TAREAS
+      const deleteTask = (thisElement) => {
+        const elemId = thisElement.getAttribute('id');
+        document.getElementById(elemId).remove();
+      };
+
+      // FUNCION PARA AGREGAR ELEMENTOS EN DOM
+      const addElementToDOM = (type, content, parentId) => {
+        const parentElem = document.getElementById(parentId);
+        const elem = document.createElement(type);
+        const contentElem = document.createTextNode(content);
+
+        elem.setAttribute('id', `task-${count}`);
+        elem.setAttribute('class', 'task');
+        elem.setAttribute('onclick', 'deleteTask(this)');
+        elem.appendChild(contentElem);
+        parentElem.appendChild(elem);
+
+        count += 1;
+      };
+
+      // FUNCION PARA DETECTAR TECLA + O ENTER
+      const pressEnterOrPlus = (e) => {
+        if (e.key === 'Enter' || e.key === '+') {
+          e.preventDefault();
+          addTask();
+        }
+      };
+
+      // FUNCION PARA AGREGAR TAREAS A LA LISTA
+      const addTask = () => {
+        const inputValue = document.getElementById('input-task').value;
+        if (inputValue.trim() === '') {
+          alert('No puede insertar una tarea vacía.');
+          return;
+        }
+        addElementToDOM('li', inputValue, 'task-list');
+        document.getElementById('input-task').value = '';
+      };
+    </script>
+  </body>
+</html>
